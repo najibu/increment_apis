@@ -15,13 +15,16 @@ class LessonsController extends Controller
     public function index()
     {
         /*
-        Why it is bad practice 
+        Why it is bad practice Lesson::all();
         1. All is bad
         2. No way to attach meta data
         3. Linking db structure to the API output
         4. No way to signal headers/response codes
          */
-        return Lesson::all(); //Bad practice
+        $lessons = Lesson::all(); 
+        return response()->json([
+            'data' => $lessons->toArray()
+        ], 200);; 
     }
 
     /**
@@ -53,7 +56,19 @@ class LessonsController extends Controller
      */
     public function show($id)
     {
-        //
+        $lesson = Lesson::find($id);
+
+        if (! $lesson) {
+            return response()->json([
+                'error' => [
+                    'message' => 'Lesson does not exist'
+                ]
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $lesson->toArray()
+        ], 200);
     }
 
     /**
