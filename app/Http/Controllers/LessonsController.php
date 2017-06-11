@@ -16,8 +16,9 @@ class LessonsController extends ApiController
 
     public function __construct(LessonTransformer $lessonTransformer)
     {
-    
         $this->lessonTransformer = $lessonTransformer;
+
+        $this->middleware('auth.basic', ['only' => 'store']);
     }
 
     /**
@@ -40,15 +41,6 @@ class LessonsController extends ApiController
         ]);; 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -58,7 +50,14 @@ class LessonsController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        if (! $request->title or ! $request->body or ! is_bool($request->active))
+        {
+            return $this->respondInvalidRequest();   
+        }
+
+        Lesson::create($request->all());
+
+        return $this->respondCreated();
     }
 
     /**
