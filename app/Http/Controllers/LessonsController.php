@@ -6,7 +6,7 @@ use App\Lesson;
 use Illuminate\Http\Request;
 use App\Http\Transformers\LessonTransformer;
 
-class LessonsController extends Controller
+class LessonsController extends ApiController
 {   
     /**
      * [$lessonTransformer description]
@@ -35,9 +35,9 @@ class LessonsController extends Controller
         4. No way to signal headers/response codes
          */
         $lessons = Lesson::all(); 
-        return response()->json([
+        return $this->respond([
             'data' => $this->lessonTransformer->transformCollection($lessons->all())
-        ], 200);; 
+        ]);; 
     }
 
     /**
@@ -72,16 +72,12 @@ class LessonsController extends Controller
         $lesson = Lesson::find($id);
 
         if (! $lesson) {
-            return response()->json([
-                'error' => [
-                    'message' => 'Lesson does not exist'
-                ]
-            ], 404);
+            return $this->responseNotFound('Lesson does not exist.');
         }
 
-        return response()->json([
+        return $this->respond([
             'data' => $this->lessonTransformer->transform($lesson->toArray())
-        ], 200);
+        ]);
     }
 
     /**

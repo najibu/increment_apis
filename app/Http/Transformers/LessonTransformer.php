@@ -15,7 +15,7 @@ class LessonTransformer extends Tranformer {
     return[
       'title' => $lesson['title'],
       'body' => $lesson['body'],
-      'active' => $lesson['some_bool']
+      'active' => (boolean) $lesson['some_bool']
     ];
   }
 }
