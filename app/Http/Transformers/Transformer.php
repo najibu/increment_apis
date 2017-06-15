@@ -2,7 +2,7 @@
 
 namespace App\Http\Transformers;
 
-abstract class Tranformer {
+abstract class Transformer {
 
   /**
    * [transform a collection of lessons]

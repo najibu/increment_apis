@@ -3,7 +3,7 @@
 namespace App\Http\Transformers;
 
 
-class LessonTransformer extends Tranformer {
+class LessonTransformer extends Transformer {
 
   /**
      * Transform a lesson
