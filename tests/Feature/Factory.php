@@ -18,6 +18,7 @@ trait Factory {
   {
     while ($this->times--) {
       $stub = array_merge($this->getStub(), $fields);
+
       $type::create($stub);
     }
   }
