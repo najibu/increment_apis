@@ -26,7 +26,7 @@ class LessonsController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         /*
         Why it is bad practice Lesson::all();
@@ -35,10 +35,14 @@ class LessonsController extends ApiController
         3. Linking db structure to the API output
         4. No way to signal headers/response codes
          */
-        $lessons = Lesson::all(); 
-        return $this->respond([
-            'data' => $this->lessonTransformer->transformCollection($lessons->all())
-        ]);; 
+        $limit = $request->input('limit') ?: 3;
+
+        $lessons = Lesson::paginate($limit); 
+        //dd(get_class_methods($lessons));
+
+        return $this->respondWithPagination($lessons, [
+            $this->lessonTransformer->transformCollection($lessons->all())
+        ]);        
     }
 
 
@@ -77,39 +81,5 @@ class LessonsController extends ApiController
         return $this->respond([
             'data' => $this->lessonTransformer->transform($lesson->toArray())
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

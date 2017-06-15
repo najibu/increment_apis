@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApiController extends Controller 
 {
@@ -102,5 +103,19 @@ class ApiController extends Controller
           'status_code' => $this->getstatusCode()
         ] 
       ]);
+    }
+
+    protected function respondWithPagination(LengthAwarePaginator $lessons, array $data)
+    {
+       $data = array_merge($data, [
+            'paginator' => [
+                'total_count' => $lessons->total(),
+                'total_pages' => ceil($lessons->total() / $lessons->perPage()),
+                'current_page' => $lessons->currentPage(),
+                'limit' => $lessons->perPage(),
+            ]
+       ]);
+       
+       return $this->respond($data);
     }
 }
